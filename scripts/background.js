@@ -802,41 +802,36 @@ function convertArrayBuffer2Base64(ab, faviconUrl) {
 /// Rebuild the context menu using the search engines from storage sync
 function rebuildContextMenu() {
   if (logToConsole) console.log("Rebuilding context menu..");
-  browser.runtime.getBrowserInfo().then(info => {
-    let v = info.version;
-    let browserVersion = parseInt(v.slice(0, v.search(".") - 1));
 
-    browser.contextMenus.removeAll();
-    browser.contextMenus.onClicked.removeListener(processSearch);
+  browser.contextMenus.removeAll();
+  browser.contextMenus.onClicked.removeListener(processSearch);
 
-    if (contextsearch_optionsMenuLocation === "top") {
-      rebuildContextOptionsMenu();
-    }
+  if (contextsearch_optionsMenuLocation === "top") {
+    rebuildContextOptionsMenu();
+  }
 
-    searchEnginesArray = [];
-    var index = 0;
-    for (let id in searchEngines) {
-      let base64String = searchEngines[id].base64;
-      let strIndex = "cs-" + index.toString();
-      let strTitle = searchEngines[id].name;
+  searchEnginesArray = [];
+  var index = 0;
+  for (let id in searchEngines) {
+    let base64String = searchEngines[id].base64;
+    let strIndex = "cs-" + index.toString();
+    let strTitle = searchEngines[id].name;
 
-      searchEnginesArray.push(id);
-      buildContextMenuItem(
-        searchEngines[id],
-        strIndex,
-        strTitle,
-        base64String,
-        browserVersion
-      );
-      index += 1;
-    }
+    searchEnginesArray.push(id);
+    buildContextMenuItem(
+      searchEngines[id],
+      strIndex,
+      strTitle,
+      base64String
+    );
+    index += 1;
+  }
 
-    if (contextsearch_optionsMenuLocation === "bottom") {
-      rebuildContextOptionsMenu();
-    }
+  if (contextsearch_optionsMenuLocation === "bottom") {
+    rebuildContextOptionsMenu();
+  }
 
-    browser.contextMenus.onClicked.addListener(processSearch);
-  });
+  browser.contextMenus.onClicked.addListener(processSearch);
 }
 
 function rebuildContextOptionsMenu() {
@@ -876,13 +871,12 @@ function buildContextMenuItem(
   searchEngine,
   index,
   title,
-  base64String,
-  browserVersion
+  base64String
 ) {
   const contexts = ["selection"];
   let faviconUrl = "data:image/png;base64," + base64String;
   if (!searchEngine.show) return;
-  if (browserVersion >= 56 && contextsearch_displayFavicons === true) {
+  if (contextsearch_displayFavicons === true) {
     browser.contextMenus.create({
       id: index,
       title: title,
