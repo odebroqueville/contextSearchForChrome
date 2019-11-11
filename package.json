@@ -1,22 +1,22 @@
 {
-  "name": "contextSearchLite",
-  "title": "Context Search Lite",
-  "version": "2.0.0",
-  "description": "Firefox add-on to search selected text in a web page using your favorite search engines.",
-  "devDependencies": {},
-  "browserslist": [
-    "Firefox >= 57"
-  ],
+  "name": "contextSearch",
+  "title": "Context Search",
+  "version": "1.0.0",
+  "description": "Chrome extension to search selected text in a web page using your favorite search engines from a context menu.",
+  "devDependencies": {
+    "webextension-polyfill": "^0.5.0"
+  },
   "scripts": {
     "test": "eslint .",
     "lint": "eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/odebroqueville/contextSearchLite.git"
+    "url": "git+https://github.com/odebroqueville/contextSearchForChrome.git"
   },
   "keywords": [
-    "webextension",
+    "extension",
+    "plugin",
     "context",
     "context search",
     "context menu",
@@ -26,9 +26,9 @@
   "author": "Olivier de Broqueville <olivier.debroqueville@gmail.com>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/odebroqueville/contextSearchLite/issues"
+    "url": "https://github.com/odebroqueville/contextSearchForChrome/issues"
   },
-  "homepage": "https://github.com/odebroqueville/contextSearchLite#readme",
+  "homepage": "https://github.com/odebroqueville/contextSearchForChrome#readme",
   "dependencies": {
     "sortablejs": "^1.10.1"
   }

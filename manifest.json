@@ -4,13 +4,14 @@
   "default_locale": "en",
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "2.0",
-  "author": "Olivier de Broqueville",
+  "version": "1.0",
+  "author": "Olivier de Broqueville, Carl Scheller",
 
   "content_security_policy" : "script-src 'self'; object-src 'self'; img-src *;",
 
   "background": {
       "scripts": [
+        "/scripts/browser-polyfill.min.js",
         "/scripts/background.js", 
         "/scripts/sort.js"
       ]
@@ -51,6 +52,7 @@
     {
       "matches": ["<all_urls>"],
       "js": [
+        "/scripts/browser-polyfill.min.js",
         "/scripts/selection.js", 
         "/scripts/sort.js", 
         "/scripts/Sortable.min.js"

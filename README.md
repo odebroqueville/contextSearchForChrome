@@ -1,12 +1,12 @@
 # Context Search
 
-Firefox add-on to search selected text in a web page using your favorite search engines.
+Chrome extension to search selected text in a web page using your favorite search engines from a context menu or from a grid of icons.
 
 ## How does it work?
 <ul>
 <li>Select some text on a webpage</li>
 <li>Right click (or Alt-click) on a selection</li>
-<li>A context menu (or a grid of icons) appears, displaying the list of search engines chosen in the extension's preferences</li>
+<li>A context menu (or a grid of icons) appears, displaying the list of search engines selected in the extension's preferences</li>
 <li>Click on the search engine with which you’d like to search for the selected text</li>
 </ul>
 
