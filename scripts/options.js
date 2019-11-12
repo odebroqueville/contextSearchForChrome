@@ -604,23 +604,24 @@ function setOptions(options) {
 
 // Restore the list of search engines and the options to be displayed in the options page
 async function restoreOptionsPage() {
-  try {
-    let data = await chrome.storage.sync.get(null);
-    let options = data.options;
-    if (logToConsole) {
-      console.log("Options:\n");
-      console.log(options);
+  await chrome.storage.sync.get(null, data => {
+    try {
+      let options = data.options;
+      if (logToConsole) {
+        console.log("Options:\n");
+        console.log(options);
+      }
+      delete data.options;
+      if (logToConsole) {
+        console.log("Search engines retrieved from storage sync:\n");
+        console.log(data);
+      }
+      listSearchEngines(data);
+      setOptions(options);
+    } catch (err) {
+      if (logToConsole) console.error(err);
     }
-    delete data.options;
-    if (logToConsole) {
-      console.log("Search engines retrieved from storage sync:\n");
-      console.log(data);
-    }
-    listSearchEngines(data);
-    setOptions(options);
-  } catch (err) {
-    if (logToConsole) console.error(err);
-  }
+  });
 }
 
 function saveToLocalDisk() {
