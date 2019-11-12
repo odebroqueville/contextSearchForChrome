@@ -92,6 +92,13 @@ function init() {
     console.log(`Domain: ${domain}`);
   }
   chrome.storage.sync.get(null, data => {
+    if (chrome.runtime.lastError) {
+      if (logToConsole) {
+        console.error(chrome.runtime.lastError);
+        console.log("Failed to retrieve data from storage sync.");
+      }
+      return;
+    }
     if (data.options){
       if (data.options.tabMode === "sameTab") {
         sameTab = true;
@@ -101,7 +108,7 @@ function init() {
       delete data.options;
     }
     searchEngines = data;
-  }, onError);
+  });
 }
 
 function handleAltClickWithGrid(e) {

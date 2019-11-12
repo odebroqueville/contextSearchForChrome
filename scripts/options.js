@@ -72,7 +72,6 @@ let typingInterval = 1500;
 
 /// Event handlers
 document.addEventListener("DOMContentLoaded", restoreOptionsPage);
-//chrome.storage.onChanged.addListener(handleStorageChange);
 chrome.runtime.onMessage.addListener(handleIncomingMessages);
 
 // Settings
@@ -101,11 +100,7 @@ btnUpload.addEventListener("change", handleFileUpload);
 
 // Send a message to the background script
 function sendMessage(action, data) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime
-      .sendMessage({ action: action, data: data })
-      .then(resolve, reject);
-  });
+  chrome.runtime.sendMessage({ action: action, data: data });
 }
 
 function handleIncomingMessages(message){
@@ -605,22 +600,25 @@ function setOptions(options) {
 // Restore the list of search engines and the options to be displayed in the options page
 async function restoreOptionsPage() {
   await chrome.storage.sync.get(null, data => {
-    try {
-      let options = data.options;
+    if (chrome.runtime.lastError) {
       if (logToConsole) {
-        console.log("Options:\n");
-        console.log(options);
+        console.error(chrome.runtime.lastError);
+        console.log("Failed to retrieve data from storage sync.");
       }
-      delete data.options;
-      if (logToConsole) {
-        console.log("Search engines retrieved from storage sync:\n");
-        console.log(data);
-      }
-      listSearchEngines(data);
-      setOptions(options);
-    } catch (err) {
-      if (logToConsole) console.error(err);
+      return;
     }
+    let options = data.options;
+    if (logToConsole) {
+      console.log("Options:\n");
+      console.log(options);
+    }
+    delete data.options;
+    if (logToConsole) {
+      console.log("Search engines retrieved from storage sync:\n");
+      console.log(data);
+    }
+    listSearchEngines(data);
+    setOptions(options);
   });
 }
 
@@ -638,7 +636,7 @@ function saveToLocalDisk() {
 }
 
 function handleFileUpload() {
-  chrome.storage.sync.clear().then(function() {
+  chrome.storage.sync.clear(() => {
     let upload = document.getElementById("upload");
     let jsonFile = upload.files[0];
     let reader = new FileReader();
@@ -648,7 +646,7 @@ function handleFileUpload() {
       saveSearchEngines();
     };
     reader.readAsText(jsonFile);
-  }, onError);
+  });
 }
 
 function updateTabMode() {

@@ -77,21 +77,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         processMultiTabSearch();
         break;
       }
-      chrome.tabs
-        .query({ active: true, currentWindow: true })
-        .then(function(tabs) {
-          if (logToConsole) console.log(tabs);
-          let tabIndex = 0;
-          for (let tab of tabs) {
-            if (tab.active) {
-              if (logToConsole) console.log("Active tab url: " + tab.url);
-              tabIndex = tab.index;
-              if (logToConsole) console.log("tabIndex: " + tabIndex);
-              break;
-            }
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          if (logToConsole) {
+            console.error(chrome.runtime.lastError);
+            console.log("Failed to retrieve active tab from current window.");
           }
-          searchUsing(id, tabIndex);
-        }, onError);
+          return;
+        }
+        if (logToConsole) console.log(tabs);
+        let tabIndex = 0;
+        for (let tab of tabs) {
+          if (tab.active) {
+            if (logToConsole) console.log("Active tab url: " + tab.url);
+            tabIndex = tab.index;
+            if (logToConsole) console.log("tabIndex: " + tabIndex);
+            break;
+          }
+        }
+        searchUsing(id, tabIndex);
+      });
       break;
     case "notify":
       notify(message.data);
@@ -224,29 +229,29 @@ function init() {
         "Loading the extension's preferences and search engines from storage sync.."
       );
     chrome.storage.sync.get(null, data => {
-        let options = {};
-        if (isEmpty(data.options)) {
-          options = defaultOptions.options;
-        } else {
-          options = data.options;
-          delete data.options;
-        }
+      if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.log("Options:\n");
-          console.log(options);
-        }
-        let forceReload = options.forceSearchEnginesReload;
-        let promise1 = initialiseOptions(options);
-        let promise2 = initialiseSearchEngines(data, forceReload);
-        Promise.all([promise1, promise2]).then(resolve, reject);
-      })
-      .catch(err => {
-        if (logToConsole) {
-          console.error(err);
+          console.error(chrome.runtime.lastError);
           console.log("Failed to retrieve data from storage sync.");
         }
         reject();
-      });
+      }
+      let options = {};
+      if (isEmpty(data.options)) {
+        options = defaultOptions.options;
+      } else {
+        options = data.options;
+        delete data.options;
+      }
+      if (logToConsole) {
+        console.log("Options:\n");
+        console.log(options);
+      }
+      let forceReload = options.forceSearchEnginesReload;
+      let promise1 = initialiseOptions(options);
+      let promise2 = initialiseSearchEngines(data, forceReload);
+      Promise.all([promise1, promise2]).then(resolve, reject);
+    });
   });
 }
 
@@ -265,18 +270,16 @@ function initialiseOptions(data) {
         console.log("Options:\n");
         console.log(options);
       }
-      chrome.storage.sync
-        .remove("options")
-        .then(() => {
-          setOptions(options).then(resolve, reject);
-        })
-        .catch(err => {
+      chrome.storage.sync.remove("options", () => {
+        if (chrome.runtime.lastError) {
           if (logToConsole) {
-            console.error(err);
+            console.error(chrome.runtime.lastError);
             console.log("Failed to remove options from storage sync.");
           }
           reject();
-        });
+        }
+        setOptions(options).then(resolve, reject);
+      });
     } else {
       setOptions(options).then(resolve, reject);
     }
@@ -293,18 +296,16 @@ function initialiseSearchEngines(data, forceReload) {
     if (isEmpty(data) || forceReload) {
       if (!isEmpty(data)) {
         let keys = Object.keys(data);
-        chrome.storage.sync
-          .remove(keys)
-          .then(() => {
-            loadDefaultSearchEngines(DEFAULT_JSON).then(resolve, reject);
-          })
-          .catch(err => {
+        chrome.storage.sync.remove(keys, () => {
+          if (chrome.runtime.lastError) {
             if (logToConsole) {
-              console.error(err);
+              console.error(chrome.runtime.lastError);
               console.log("Failed to remove search engines from storage sync.");
             }
             reject();
-          });
+          }
+          loadDefaultSearchEngines(DEFAULT_JSON).then(resolve, reject);
+        });
       } else {
         if (logToConsole)
           console.log(
@@ -327,15 +328,15 @@ function initialiseSearchEngines(data, forceReload) {
 function getOptions() {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get("options", data => {
-        if (logToConsole) console.log(data);
-        resolve(data);
-      })
-      .catch(err => {
+      if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(err);
+          console.error(chrome.runtime.lastError);
           console.log("Failed to retrieve options from storage sync.");
         }
-        reject(err);
+        reject();
+      }
+      if (logToConsole) console.log(data);
+      resolve(data);
       });
   });
 }
@@ -359,21 +360,19 @@ function saveOptions(data, blnRebuildContextMenu) {
     let options = { options: data };
     let strOptions = JSON.stringify(data);
     if (logToConsole) console.log("Options settings:\n" + strOptions);
-    chrome.storage.sync
-      .set(options)
-      .then(() => {
-        if (blnRebuildContextMenu) rebuildContextMenu();
-        if (logToConsole)
-          console.log("Successfully saved the options to storage sync.");
-        resolve();
-      })
-      .catch(err => {
+    chrome.storage.sync.set(options, () => {
+      if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(err);
+          console.error(chrome.runtime.lastError);
           console.log("Failed to save options to storage sync.");
         }
-        reject(err);
-      });
+        reject();
+      }
+      if (blnRebuildContextMenu) rebuildContextMenu();
+      if (logToConsole)
+        console.log("Successfully saved the options to storage sync.");
+      resolve();
+    });
   });
 }
 
@@ -493,50 +492,45 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
         searchEnginesLocal[id].base64 = null;
       }
     }
-    chrome.storage.sync
-      .set(searchEnginesLocal)
-      .then(() => {
-        if (blnNotify) notify(notifySearchEnginesLoaded);
+    chrome.storage.sync.set(searchEnginesLocal, () => {
+      if (chrome.runtime.lastError) {
         if (logToConsole) {
-          for (let id in searchEnginesLocal) {
-            console.log(
-              `Search engine: ${id} has been saved to storage sync as follows:\n`
-            );
-            console.log(searchEnginesLocal[id]);
-          }
-        }
-        if (blnUpdateContentScripts) {
-          chrome.tabs
-            .query({ currentWindow: true, url: "<all_urls>" })
-            .then(tabs => {
-              if (tabs.length > 0) {
-                if (logToConsole) console.log(tabs);
-                sendMessageToOptionsScript("updateSearchEnginesList", searchEnginesLocal);
-                updateSearchEnginesList(tabs);
-               } else return;
-            })
-            .catch(err => {
-              if (logToConsole) {
-                console.error(err);
-                console.log(
-                  "Failed to find any browser tabs to send the 'updateSearchEnginesList' message to."
-                );
-              }
-            });
-        }
-        if (logToConsole)
-          console.log(
-            "Search engines have been successfully saved to storage sync."
-          );
-        resolve();
-      })
-      .catch(err => {
-        if (logToConsole) {
-          console.error(err);
+          console.error(chrome.runtime.lastError);
           console.log("Failed to save the search engines to storage sync.");
         }
         reject();
-      });
+      }
+      if (blnNotify) notify(notifySearchEnginesLoaded);
+      if (logToConsole) {
+        for (let id in searchEnginesLocal) {
+          console.log(
+            `Search engine: ${id} has been saved to storage sync as follows:\n`
+          );
+          console.log(searchEnginesLocal[id]);
+        }
+      }
+      if (blnUpdateContentScripts) {
+        chrome.tabs.query({ currentWindow: true, url: "<all_urls>" }, tabs => {
+          if (chrome.runtime.lastError) {
+            if (logToConsole) {
+              console.error(chrome.runtime.lastError);
+              console.log("Failed to find any browser tabs to send the 'updateSearchEnginesList' message to.");
+            }
+            reject();
+          }
+          if (tabs.length > 0) {
+            if (logToConsole) console.log(tabs);
+            sendMessageToOptionsScript("updateSearchEnginesList", searchEnginesLocal);
+            updateSearchEnginesList(tabs);
+          }
+        });
+      }
+      if (logToConsole)
+        console.log(
+          "Search engines have been successfully saved to storage sync."
+        );
+      resolve();
+      })
   });
 }
 
@@ -901,7 +895,7 @@ function processSearch(info, tab) {
     displaySearchResults(targetUrl, tab.index);
     return;
   } else if (id === "options") {
-    chrome.runtime.openOptionsPage().then(null, onError);
+    chrome.runtime.openOptionsPage();
     return;
   } else if (id === "multitab") {
     processMultiTabSearch();
@@ -917,28 +911,37 @@ function processSearch(info, tab) {
 }
 
 function processMultiTabSearch() {
-  chrome.storage.sync.get(null, data => {
-    searchEngines = sortByIndex(data);
-    let multiTabSearchEngineUrls = [];
-    for (let id in searchEngines) {
-      if (searchEngines[id].multitab) {
-        multiTabSearchEngineUrls.push(
-          getSearchEngineUrl(searchEngines[id].url, selection)
-        );
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(null, data => {
+      if (chrome.runtime.lastError) {
+        if (logToConsole) {
+          console.error(chrome.runtime.lastError);
+          console.log("Failed to retrieve data from storage sync.");
+        }
+        reject();
       }
-    }
-    if (isEmpty(multiTabSearchEngineUrls)) {
-      notify("Search engines have not been selected for a multi-search.");
-      return;
-    }
-    if (logToConsole) console.log(multiTabSearchEngineUrls);
-    chrome.windows
-      .create({
-        titlePreface: windowTitle + '"' + selection + '"',
-        url: multiTabSearchEngineUrls
-      })
-      .then(null, onError);
-  }, onError);
+      searchEngines = sortByIndex(data);
+      let multiTabSearchEngineUrls = [];
+      for (let id in searchEngines) {
+        if (searchEngines[id].multitab) {
+          multiTabSearchEngineUrls.push(
+            getSearchEngineUrl(searchEngines[id].url, selection)
+          );
+        }
+      }
+      if (isEmpty(multiTabSearchEngineUrls)) {
+        notify("Search engines have not been selected for a multi-search.");
+        return;
+      }
+      if (logToConsole) console.log(multiTabSearchEngineUrls);
+      chrome.windows
+        .create({
+          titlePreface: windowTitle + '"' + selection + '"',
+          url: multiTabSearchEngineUrls
+        });
+      resolve();
+    });
+  });
 }
 
 // Handle search terms if there are any
@@ -962,22 +965,28 @@ function searchUsing(id, tabIndex) {
 // Display the search results
 function displaySearchResults(targetUrl, tabPosition) {
   if (logToConsole) console.log("Tab position: " + tabPosition);
-  chrome.windows.getCurrent({ populate: false }).then(function(windowInfo) {
+  chrome.windows.getCurrent({ populate: false }, (windowInfo) => {
+    if (chrome.runtime.lastError) {
+      if (logToConsole) {
+        console.error(chrome.runtime.lastError);
+        console.log("Failed to fetch current window.");
+      }
+      return;
+    }
     let currentWindowID = windowInfo.id;
     if (contextsearch_openSearchResultsInNewWindow) {
-      chrome.windows
-        .create({
-          url: targetUrl
-        })
-        .then(function() {
-          if (!contextsearch_makeNewTabOrWindowActive) {
-            chrome.windows
-              .update(currentWindowID, {
-                focused: true
-              })
-              .then(null, onError);
+      chrome.windows.create({url: targetUrl}, () => {
+        if (chrome.runtime.lastError) {
+          if (logToConsole) {
+            console.error(chrome.runtime.lastError);
+            console.log("Failed to retrieve data from storage sync.");
           }
-        }, onError);
+          return;
+        }
+        if (!contextsearch_makeNewTabOrWindowActive) {
+          chrome.windows.update(currentWindowID, {focused: true});
+        }
+      });
     } else if (contextsearch_openSearchResultsInNewTab) {
       chrome.tabs.create({
         active: contextsearch_makeNewTabOrWindowActive,
@@ -990,7 +999,7 @@ function displaySearchResults(targetUrl, tabPosition) {
         console.log("Opening search results in same tab, url is " + targetUrl);
       chrome.tabs.update({ url: targetUrl });
     }
-  }, onError);
+  });
 }
 
 /// OMNIBOX
@@ -1014,12 +1023,17 @@ chrome.omnibox.onInputChanged.addListener((input, suggest) => {
 chrome.omnibox.onInputEntered.addListener(input => {
   if (logToConsole) console.log(input);
   let tabPosition = 0;
-  chrome.tabs
-    .query({
+  chrome.tabs.query({
       currentWindow: true,
       active: true
-    })
-    .then(function(tabs) {
+    }, (tabs) => {
+      if (chrome.runtime.lastError) {
+        if (logToConsole) {
+          console.error(chrome.runtime.lastError);
+          console.log("Failed to retrieve active tab in current window.");
+        }
+        return;
+      }
       for (let tab of tabs) {
         tabPosition = tab.index;
       }
@@ -1043,7 +1057,7 @@ chrome.omnibox.onInputEntered.addListener(input => {
           if (logToConsole) console.log("Failed to process " + input);
         }
       }
-    }, onError);
+    });
 });
 
 function buildSuggestion(text) {
@@ -1165,8 +1179,7 @@ function sendMessageToTabs(tabs, message) {
 function sendMessageToTab(tab, message) {
   return new Promise((resolve, reject) => {
     let tabId = tab.id;
-    chrome.tabs
-      .sendMessage(tabId, message)
+    chrome.tabs.sendMessage(tabId, message)
       .then(() => {
         if (logToConsole) {
           console.log(`Successfully sent message to:\n`);
