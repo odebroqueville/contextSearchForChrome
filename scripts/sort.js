@@ -1,13 +1,15 @@
+const logToConsole = false;
+
 /// Sort search engines by index
 function sortByIndex(list) {
   let sortedList = {};
   let n = Object.keys(list).length;
   let arrayOfIndexes = [];
   let max = 0;
-  console.log(list);
+  if (logToConsole) console.log(list);
   // Determine a max index
   for (let id in list) {
-    console.log(`id = ${id}`);
+    if (logToConsole) console.log(`id = ${id}`);
     if (list[id].index != null && list[id].index > max) {
       max = list[id].index + 1;
     }
