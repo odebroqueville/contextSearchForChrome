@@ -75,14 +75,14 @@ document.addEventListener("DOMContentLoaded", restoreOptionsPage);
 chrome.runtime.onMessage.addListener(handleIncomingMessages);
 
 // Settings
-cacheFavicons.addEventListener("click", updateCacheFavicons);
-displayFavicons.addEventListener("click", updateDisplayFavicons);
+//cacheFavicons.addEventListener("click", updateCacheFavicons);
+//displayFavicons.addEventListener("click", updateDisplayFavicons);
 tabMode.addEventListener("click", updateTabMode);
 tabActive.addEventListener("click", updateTabMode);
 optionsMenuLocation.addEventListener("click", updateOptionsMenuLocation);
 resetPreferences.addEventListener("click", updateResetOptions);
 forceSearchEnginesReload.addEventListener("click", updateResetOptions);
-forceFaviconsReload.addEventListener("click", updateResetOptions);
+//forceFaviconsReload.addEventListener("click", updateResetOptions);
 
 // All engine buttons
 btnClearAll.addEventListener("click", clearAll);
@@ -561,12 +561,12 @@ function setOptions(options) {
     optionsMenuLocation.value = "bottom";
   }
 
-  if (options.favicons === false) {
+/*   if (options.favicons === false) {
     displayFavicons.checked = false;
   } else {
     // Default setting is to fetch favicons for context menu list
     displayFavicons.checked = true;
-  }
+  } */
 
   if (options.cacheFavicons === false) {
     cacheFavicons.checked = false;
