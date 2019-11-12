@@ -223,9 +223,7 @@ function init() {
       console.log(
         "Loading the extension's preferences and search engines from storage sync.."
       );
-    chrome.storage.sync
-      .get()
-      .then(data => {
+    chrome.storage.sync.get(null, data => {
         let options = {};
         if (isEmpty(data.options)) {
           options = defaultOptions.options;
@@ -328,9 +326,7 @@ function initialiseSearchEngines(data, forceReload) {
 
 function getOptions() {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync
-      .get("options")
-      .then(data => {
+    chrome.storage.sync.get("options", data => {
         if (logToConsole) console.log(data);
         resolve(data);
       })
@@ -921,7 +917,7 @@ function processSearch(info, tab) {
 }
 
 function processMultiTabSearch() {
-  chrome.storage.sync.get(null).then(function(data) {
+  chrome.storage.sync.get(null, data => {
     searchEngines = sortByIndex(data);
     let multiTabSearchEngineUrls = [];
     for (let id in searchEngines) {

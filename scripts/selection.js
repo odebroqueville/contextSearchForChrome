@@ -91,7 +91,7 @@ function init() {
     console.log(`Path name: ${pn}`);
     console.log(`Domain: ${domain}`);
   }
-  chrome.storage.sync.get(null).then(function(data) {
+  chrome.storage.sync.get(null, data => {
     if (data.options){
       if (data.options.tabMode === "sameTab") {
         sameTab = true;
