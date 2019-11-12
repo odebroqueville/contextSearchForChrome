@@ -589,12 +589,12 @@ function setOptions(options) {
     forceSearchEnginesReload.checked = true;
   }
 
-  if (options.forceFaviconsReload === false) {
+/*   if (options.forceFaviconsReload === false) {
     forceFaviconsReload.checked = false;
   } else {
     // Default setting is to cache favicons in storage sync
     forceFaviconsReload.checked = true;
-  }
+  } */
 }
 
 // Restore the list of search engines and the options to be displayed in the options page
