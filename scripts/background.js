@@ -18,25 +18,25 @@ const base64ContextSearchIcon =
   "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";
 
 // Constants for translations
-const notifyEnableStorageSync = browser.i18n.getMessage(
+const notifyEnableStorageSync = chrome.i18n.getMessage(
   "notifyEnableStorageSync"
 );
-const notifySearchEnginesLoaded = browser.i18n.getMessage(
+const notifySearchEnginesLoaded = chrome.i18n.getMessage(
   "notifySearchEnginesLoaded"
 );
-const titleMultipleSearchEngines = browser.i18n.getMessage(
+const titleMultipleSearchEngines = chrome.i18n.getMessage(
   "titleMultipleSearchEngines"
 );
-const titleGoogleSearch = browser.i18n.getMessage("titleGoogleSearch");
-const titleOptions = browser.i18n.getMessage("titleOptions");
-const windowTitle = browser.i18n.getMessage("windowTitle");
-const omniboxDescription = browser.i18n.getMessage("omniboxDescription");
-const notifyUsage = browser.i18n.getMessage("notifyUsage");
-const notifySearchEngineWithKeyword = browser.i18n.getMessage(
+const titleGoogleSearch = chrome.i18n.getMessage("titleGoogleSearch");
+const titleOptions = chrome.i18n.getMessage("titleOptions");
+const windowTitle = chrome.i18n.getMessage("windowTitle");
+const omniboxDescription = chrome.i18n.getMessage("omniboxDescription");
+const notifyUsage = chrome.i18n.getMessage("notifyUsage");
+const notifySearchEngineWithKeyword = chrome.i18n.getMessage(
   "notifySearchEngineWithKeyword"
 );
-const notifyUnknown = browser.i18n.getMessage("notifyUnknown");
-const notifySearchEngineUrlRequired = browser.i18n.getMessage(
+const notifyUnknown = chrome.i18n.getMessage("notifyUnknown");
+const notifySearchEngineUrlRequired = chrome.i18n.getMessage(
   "notifySearchEngineUrlRequired"
 );
 
@@ -66,7 +66,7 @@ const defaultOptions = {
 
 /// Handle Incoming Messages
 // Listen for messages from the content or options script
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   let id = "";
   let domain = "";
   switch (message.action) {
@@ -77,7 +77,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         processMultiTabSearch();
         break;
       }
-      browser.tabs
+      chrome.tabs
         .query({ active: true, currentWindow: true })
         .then(function(tabs) {
           if (logToConsole) console.log(tabs);
@@ -203,7 +203,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
       break;
     case "saveSearchEnginesToDisk":
-      browser.downloads.download({
+      chrome.downloads.download({
         url: message.data,
         saveAs: true,
         filename: "searchEngines.json"
@@ -223,7 +223,7 @@ function init() {
       console.log(
         "Loading the extension's preferences and search engines from storage sync.."
       );
-    browser.storage.sync
+    chrome.storage.sync
       .get(null)
       .then(data => {
         let options = {};
@@ -267,7 +267,7 @@ function initialiseOptions(data) {
         console.log("Options:\n");
         console.log(options);
       }
-      browser.storage.sync
+      chrome.storage.sync
         .remove("options")
         .then(() => {
           setOptions(options).then(resolve, reject);
@@ -295,7 +295,7 @@ function initialiseSearchEngines(data, forceReload) {
     if (isEmpty(data) || forceReload) {
       if (!isEmpty(data)) {
         let keys = Object.keys(data);
-        browser.storage.sync
+        chrome.storage.sync
           .remove(keys)
           .then(() => {
             loadDefaultSearchEngines(DEFAULT_JSON).then(resolve, reject);
@@ -328,7 +328,7 @@ function initialiseSearchEngines(data, forceReload) {
 
 function getOptions() {
   return new Promise((resolve, reject) => {
-    browser.storage.sync
+    chrome.storage.sync
       .get("options")
       .then(data => {
         if (logToConsole) console.log(data);
@@ -363,7 +363,7 @@ function saveOptions(data, blnRebuildContextMenu) {
     let options = { options: data };
     let strOptions = JSON.stringify(data);
     if (logToConsole) console.log("Options settings:\n" + strOptions);
-    browser.storage.sync
+    chrome.storage.sync
       .set(options)
       .then(() => {
         if (blnRebuildContextMenu) rebuildContextMenu();
@@ -497,7 +497,7 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
         searchEnginesLocal[id].base64 = null;
       }
     }
-    browser.storage.sync
+    chrome.storage.sync
       .set(searchEnginesLocal)
       .then(() => {
         if (blnNotify) notify(notifySearchEnginesLoaded);
@@ -510,7 +510,7 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
           }
         }
         if (blnUpdateContentScripts) {
-          browser.tabs
+          chrome.tabs
             .query({ currentWindow: true, url: "<all_urls>" })
             .then(tabs => {
               if (tabs.length > 0) {
@@ -803,8 +803,8 @@ function convertArrayBuffer2Base64(ab, faviconUrl) {
 function rebuildContextMenu() {
   if (logToConsole) console.log("Rebuilding context menu..");
 
-  browser.contextMenus.removeAll();
-  browser.contextMenus.onClicked.removeListener(processSearch);
+  chrome.contextMenus.removeAll();
+  chrome.contextMenus.onClicked.removeListener(processSearch);
 
   if (contextsearch_optionsMenuLocation === "top") {
     rebuildContextOptionsMenu();
@@ -831,34 +831,34 @@ function rebuildContextMenu() {
     rebuildContextOptionsMenu();
   }
 
-  browser.contextMenus.onClicked.addListener(processSearch);
+  chrome.contextMenus.onClicked.addListener(processSearch);
 }
 
 function rebuildContextOptionsMenu() {
   if (contextsearch_optionsMenuLocation === "bottom") {
-    browser.contextMenus.create({
+    chrome.contextMenus.create({
       id: "cs-separator",
       type: "separator",
       contexts: ["selection"]
     });
   }
-  browser.contextMenus.create({
+  chrome.contextMenus.create({
     id: "cs-multitab",
     title: titleMultipleSearchEngines,
     contexts: ["selection"]
   });
-  browser.contextMenus.create({
+  chrome.contextMenus.create({
     id: "cs-google-site",
     title: titleGoogleSearch,
     contexts: ["selection"]
   });
-  browser.contextMenus.create({
+  chrome.contextMenus.create({
     id: "cs-options",
     title: titleOptions + "...",
     contexts: ["selection"]
   });
   if (contextsearch_optionsMenuLocation === "top") {
-    browser.contextMenus.create({
+    chrome.contextMenus.create({
       id: "cs-separator",
       type: "separator",
       contexts: ["selection"]
@@ -877,14 +877,14 @@ function buildContextMenuItem(
   let faviconUrl = "data:image/png;base64," + base64String;
   if (!searchEngine.show) return;
   if (contextsearch_displayFavicons === true) {
-    browser.contextMenus.create({
+    chrome.contextMenus.create({
       id: index,
       title: title,
       contexts: contexts,
       icons: { "20": faviconUrl }
     });
   } else {
-    browser.contextMenus.create({
+    chrome.contextMenus.create({
       id: index,
       title: title,
       contexts: contexts
@@ -905,7 +905,7 @@ function processSearch(info, tab) {
     displaySearchResults(targetUrl, tab.index);
     return;
   } else if (id === "options") {
-    browser.runtime.openOptionsPage().then(null, onError);
+    chrome.runtime.openOptionsPage().then(null, onError);
     return;
   } else if (id === "multitab") {
     processMultiTabSearch();
@@ -921,7 +921,7 @@ function processSearch(info, tab) {
 }
 
 function processMultiTabSearch() {
-  browser.storage.sync.get(null).then(function(data) {
+  chrome.storage.sync.get(null).then(function(data) {
     searchEngines = sortByIndex(data);
     let multiTabSearchEngineUrls = [];
     for (let id in searchEngines) {
@@ -936,7 +936,7 @@ function processMultiTabSearch() {
       return;
     }
     if (logToConsole) console.log(multiTabSearchEngineUrls);
-    browser.windows
+    chrome.windows
       .create({
         titlePreface: windowTitle + '"' + selection + '"',
         url: multiTabSearchEngineUrls
@@ -966,16 +966,16 @@ function searchUsing(id, tabIndex) {
 // Display the search results
 function displaySearchResults(targetUrl, tabPosition) {
   if (logToConsole) console.log("Tab position: " + tabPosition);
-  browser.windows.getCurrent({ populate: false }).then(function(windowInfo) {
+  chrome.windows.getCurrent({ populate: false }).then(function(windowInfo) {
     let currentWindowID = windowInfo.id;
     if (contextsearch_openSearchResultsInNewWindow) {
-      browser.windows
+      chrome.windows
         .create({
           url: targetUrl
         })
         .then(function() {
           if (!contextsearch_makeNewTabOrWindowActive) {
-            browser.windows
+            chrome.windows
               .update(currentWindowID, {
                 focused: true
               })
@@ -983,7 +983,7 @@ function displaySearchResults(targetUrl, tabPosition) {
           }
         }, onError);
     } else if (contextsearch_openSearchResultsInNewTab) {
-      browser.tabs.create({
+      chrome.tabs.create({
         active: contextsearch_makeNewTabOrWindowActive,
         index: tabPosition + 1,
         url: targetUrl
@@ -992,19 +992,19 @@ function displaySearchResults(targetUrl, tabPosition) {
       // Open search results in the same tab
       if (logToConsole)
         console.log("Opening search results in same tab, url is " + targetUrl);
-      browser.tabs.update({ url: targetUrl });
+      chrome.tabs.update({ url: targetUrl });
     }
   }, onError);
 }
 
 /// OMNIBOX
 // Provide help text to the user
-browser.omnibox.setDefaultSuggestion({
+chrome.omnibox.setDefaultSuggestion({
   description: omniboxDescription
 });
 
 // Update the suggestions whenever the input is changed
-browser.omnibox.onInputChanged.addListener((input, suggest) => {
+chrome.omnibox.onInputChanged.addListener((input, suggest) => {
   if (input.indexOf(" ") > 0) {
     let suggestion = buildSuggestion(input);
     if (logToConsole) console.log(JSON.stringify(suggestion));
@@ -1015,10 +1015,10 @@ browser.omnibox.onInputChanged.addListener((input, suggest) => {
 });
 
 // Open the page based on how the user clicks on a suggestion
-browser.omnibox.onInputEntered.addListener(input => {
+chrome.omnibox.onInputEntered.addListener(input => {
   if (logToConsole) console.log(input);
   let tabPosition = 0;
-  browser.tabs
+  chrome.tabs
     .query({
       currentWindow: true,
       active: true
@@ -1105,7 +1105,7 @@ function buildSuggestion(text) {
 function testSearchEngine(engineData) {
   if (engineData.url != "") {
     let tempTargetUrl = getSearchEngineUrl(engineData.url, "test");
-    browser.tabs.create({ url: tempTargetUrl });
+    chrome.tabs.create({ url: tempTargetUrl });
   } else {
     notify(notifySearchEngineUrlRequired);
   }
@@ -1169,7 +1169,7 @@ function sendMessageToTabs(tabs, message) {
 function sendMessageToTab(tab, message) {
   return new Promise((resolve, reject) => {
     let tabId = tab.id;
-    browser.tabs
+    chrome.tabs
       .sendMessage(tabId, message)
       .then(() => {
         if (logToConsole) {
@@ -1196,15 +1196,15 @@ function sendMessageToOptionsScript(action, data){
     action: action,
     data: data
   }
-  browser.runtime.sendMessage(message);
+  chrome.runtime.sendMessage(message);
 }
 
 /// Notifications
 function notify(message) {
-  browser.notifications.create(message.substring(0, 20), {
+  chrome.notifications.create(message.substring(0, 20), {
     type: "basic",
-    iconUrl: browser.extension.getURL("icons/icon_64.png"),
-    title: browser.i18n.getMessage("extensionName"),
+    iconUrl: chrome.extension.getURL("icons/icon_64.png"),
+    title: chrome.i18n.getMessage("extensionName"),
     message: message
   });
 }

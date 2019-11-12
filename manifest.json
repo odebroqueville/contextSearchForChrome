@@ -11,7 +11,6 @@
 
   "background": {
       "scripts": [
-        "/scripts/browser-polyfill.min.js",
         "/scripts/background.js", 
         "/scripts/sort.js"
       ]
@@ -51,7 +50,6 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "/scripts/browser-polyfill.min.js",
         "/scripts/selection.js", 
         "/scripts/sort.js", 
         "/scripts/Sortable.min.js"

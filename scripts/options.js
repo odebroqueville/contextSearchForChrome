@@ -46,18 +46,18 @@ let numberOfSearchEngines = 0;
 let searchEngines = {};
 
 // Translation variables
-const move = browser.i18n.getMessage("move");
-const remove = browser.i18n.getMessage("remove");
-const multipleSearchEnginesSearch = browser.i18n.getMessage(
+const move = chrome.i18n.getMessage("move");
+const remove = chrome.i18n.getMessage("remove");
+const multipleSearchEnginesSearch = chrome.i18n.getMessage(
   "multipleSearchEnginesSearch"
 );
-const titleShowEngine = browser.i18n.getMessage("titleShowEngine");
-const placeHolderName = browser.i18n.getMessage("searchEngineName");
-const placeHolderKeyword = browser.i18n.getMessage("placeHolderKeyword");
-const notifySearchEngineAdded = browser.i18n.getMessage(
+const titleShowEngine = chrome.i18n.getMessage("titleShowEngine");
+const placeHolderName = chrome.i18n.getMessage("searchEngineName");
+const placeHolderKeyword = chrome.i18n.getMessage("placeHolderKeyword");
+const notifySearchEngineAdded = chrome.i18n.getMessage(
   "notifySearchEngineAdded"
 );
-const notifySearchEngineUrlRequired = browser.i18n.getMessage(
+const notifySearchEngineUrlRequired = chrome.i18n.getMessage(
   "notifySearchEngineUrlRequired"
 );
 
@@ -72,8 +72,8 @@ let typingInterval = 1500;
 
 /// Event handlers
 document.addEventListener("DOMContentLoaded", restoreOptionsPage);
-//browser.storage.onChanged.addListener(handleStorageChange);
-browser.runtime.onMessage.addListener(handleIncomingMessages);
+//chrome.storage.onChanged.addListener(handleStorageChange);
+chrome.runtime.onMessage.addListener(handleIncomingMessages);
 
 // Settings
 cacheFavicons.addEventListener("click", updateCacheFavicons);
@@ -102,7 +102,7 @@ btnUpload.addEventListener("change", handleFileUpload);
 // Send a message to the background script
 function sendMessage(action, data) {
   return new Promise((resolve, reject) => {
-    browser.runtime
+    chrome.runtime
       .sendMessage({ action: action, data: data })
       .then(resolve, reject);
   });
@@ -605,7 +605,7 @@ function setOptions(options) {
 // Restore the list of search engines and the options to be displayed in the options page
 async function restoreOptionsPage() {
   try {
-    let data = await browser.storage.sync.get(null);
+    let data = await chrome.storage.sync.get(null);
     let options = data.options;
     if (logToConsole) {
       console.log("Options:\n");
@@ -637,7 +637,7 @@ function saveToLocalDisk() {
 }
 
 function handleFileUpload() {
-  browser.storage.sync.clear().then(function() {
+  chrome.storage.sync.clear().then(function() {
     let upload = document.getElementById("upload");
     let jsonFile = upload.files[0];
     let reader = new FileReader();
@@ -712,7 +712,7 @@ function translateContent(attribute, type) {
     try {
       if (i18nElements[i].getAttribute == null) continue;
       let i18n_attrib = i18nElements[i].getAttribute(attribute);
-      let message = browser.i18n.getMessage(i18n_attrib);
+      let message = chrome.i18n.getMessage(i18n_attrib);
       switch (type) {
         case "textContent":
           i18nElements[i].textContent = message;

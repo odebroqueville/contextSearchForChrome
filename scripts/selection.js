@@ -38,11 +38,11 @@ document.addEventListener("contextmenu", handleRightClickWithoutGrid);
 document.addEventListener("mouseup", handleAltClickWithGrid);
 
 // Storage change event listener
-browser.storage.onChanged.addListener(handleStorageChange);
+chrome.storage.onChanged.addListener(handleStorageChange);
 
 /// Handle Incoming Messages
 // Listen for messages from the background script
-browser.runtime.onMessage.addListener(function(message) {
+chrome.runtime.onMessage.addListener(function(message) {
   let action = message.action;
   let data = message.data;
   switch (action) {
@@ -91,7 +91,7 @@ function init() {
     console.log(`Path name: ${pn}`);
     console.log(`Domain: ${domain}`);
   }
-  browser.storage.sync.get(null).then(function(data) {
+  chrome.storage.sync.get(null).then(function(data) {
     if (data.options){
       if (data.options.tabMode === "sameTab") {
         sameTab = true;
@@ -346,7 +346,7 @@ function isEncoded(uri) {
 }
 
 function sendMessage(action, data) {
-  browser.runtime.sendMessage({ action: action, data: data });
+  chrome.runtime.sendMessage({ action: action, data: data });
 }
 
 function absoluteUrl(url) {
