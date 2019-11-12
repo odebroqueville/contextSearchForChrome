@@ -566,14 +566,14 @@ function setOptions(options) {
   } else {
     // Default setting is to fetch favicons for context menu list
     displayFavicons.checked = true;
-  } */
+  } 
 
   if (options.cacheFavicons === false) {
     cacheFavicons.checked = false;
   } else {
     // Default setting is to cache favicons in storage sync
     cacheFavicons.checked = true;
-  }
+  } */
 
   if (options.resetPreferences === false) {
     resetPreferences.checked = false;
