@@ -224,7 +224,7 @@ function init() {
         "Loading the extension's preferences and search engines from storage sync.."
       );
     chrome.storage.sync
-      .get(null)
+      .get()
       .then(data => {
         let options = {};
         if (isEmpty(data.options)) {
