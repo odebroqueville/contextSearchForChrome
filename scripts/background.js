@@ -548,7 +548,7 @@ function updateSearchEnginesList(tabs) {
       })
       .catch(err => {
         if (logToConsole) {
-          console.error(err);
+          console.log(err);
           console.log(
             "Failed to send the 'updateSearchEnginesList' message to the browser tabs."
           );
@@ -1168,7 +1168,7 @@ function sendMessageToTabs(tabs, message) {
       })
       .catch(err => {
         if (logToConsole) {
-          console.error(err);
+          console.log(err);
           console.log("Failed to send message to ALL tabs.");
         }
         reject();
