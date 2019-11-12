@@ -602,7 +602,7 @@ async function restoreOptionsPage() {
   await chrome.storage.sync.get(null, data => {
     if (chrome.runtime.lastError) {
       if (logToConsole) {
-        console.error(chrome.runtime.lastError);
+        console.log(chrome.runtime.lastError);
         console.log("Failed to retrieve data from storage sync.");
       }
       return;

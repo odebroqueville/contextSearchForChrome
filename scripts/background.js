@@ -80,7 +80,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (chrome.runtime.lastError) {
           if (logToConsole) {
-            console.error(chrome.runtime.lastError);
+            console.log(chrome.runtime.lastError);
             console.log("Failed to retrieve active tab from current window.");
           }
           return;
@@ -231,7 +231,7 @@ function init() {
     chrome.storage.sync.get(null, data => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(chrome.runtime.lastError);
+          console.log(chrome.runtime.lastError);
           console.log("Failed to retrieve data from storage sync.");
         }
         reject();
@@ -273,7 +273,7 @@ function initialiseOptions(data) {
       chrome.storage.sync.remove("options", () => {
         if (chrome.runtime.lastError) {
           if (logToConsole) {
-            console.error(chrome.runtime.lastError);
+            console.log(chrome.runtime.lastError);
             console.log("Failed to remove options from storage sync.");
           }
           reject();
@@ -299,7 +299,7 @@ function initialiseSearchEngines(data, forceReload) {
         chrome.storage.sync.remove(keys, () => {
           if (chrome.runtime.lastError) {
             if (logToConsole) {
-              console.error(chrome.runtime.lastError);
+              console.log(chrome.runtime.lastError);
               console.log("Failed to remove search engines from storage sync.");
             }
             reject();
@@ -330,7 +330,7 @@ function getOptions() {
     chrome.storage.sync.get("options", data => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(chrome.runtime.lastError);
+          console.log(chrome.runtime.lastError);
           console.log("Failed to retrieve options from storage sync.");
         }
         reject();
@@ -363,7 +363,7 @@ function saveOptions(data, blnRebuildContextMenu) {
     chrome.storage.sync.set(options, () => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(chrome.runtime.lastError);
+          console.log(chrome.runtime.lastError);
           console.log("Failed to save options to storage sync.");
         }
         reject();
@@ -495,7 +495,7 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
     chrome.storage.sync.set(searchEnginesLocal, () => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(chrome.runtime.lastError);
+          console.log(chrome.runtime.lastError);
           console.log("Failed to save the search engines to storage sync.");
         }
         reject();
@@ -513,7 +513,7 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
         chrome.tabs.query({ currentWindow: true, url: "<all_urls>" }, tabs => {
           if (chrome.runtime.lastError) {
             if (logToConsole) {
-              console.error(chrome.runtime.lastError);
+              console.log(chrome.runtime.lastError);
               console.log("Failed to find any browser tabs to send the 'updateSearchEnginesList' message to.");
             }
             reject();
@@ -915,7 +915,7 @@ function processMultiTabSearch() {
     chrome.storage.sync.get(null, data => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(chrome.runtime.lastError);
+          console.log(chrome.runtime.lastError);
           console.log("Failed to retrieve data from storage sync.");
         }
         reject();
@@ -968,7 +968,7 @@ function displaySearchResults(targetUrl, tabPosition) {
   chrome.windows.getCurrent({ populate: false }, (windowInfo) => {
     if (chrome.runtime.lastError) {
       if (logToConsole) {
-        console.error(chrome.runtime.lastError);
+        console.log(chrome.runtime.lastError);
         console.log("Failed to fetch current window.");
       }
       return;
@@ -978,7 +978,7 @@ function displaySearchResults(targetUrl, tabPosition) {
       chrome.windows.create({url: targetUrl}, () => {
         if (chrome.runtime.lastError) {
           if (logToConsole) {
-            console.error(chrome.runtime.lastError);
+            console.log(chrome.runtime.lastError);
             console.log("Failed to retrieve data from storage sync.");
           }
           return;
@@ -1029,7 +1029,7 @@ chrome.omnibox.onInputEntered.addListener(input => {
     }, (tabs) => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
-          console.error(chrome.runtime.lastError);
+          console.log(chrome.runtime.lastError);
           console.log("Failed to retrieve active tab in current window.");
         }
         return;
