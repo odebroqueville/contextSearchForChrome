@@ -683,7 +683,7 @@ function updateResetOptions() {
   let resetOptions = {
     forceSearchEnginesReload: forceSearchEnginesReload.checked,
     resetPreferences: resetPreferences.checked,
-    forceFaviconsReload: forceFaviconsReload.checked
+    //forceFaviconsReload: forceFaviconsReload.checked
   };
   sendMessage("updateResetOptions", { resetOptions: resetOptions });
 }
