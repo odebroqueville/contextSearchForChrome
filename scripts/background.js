@@ -1184,23 +1184,20 @@ function sendMessageToTabs(tabs, message) {
 function sendMessageToTab(tab, message) {
   return new Promise((resolve, reject) => {
     let tabId = tab.id;
-    chrome.tabs.sendMessage(tabId, message)
-      .then(() => {
+    chrome.tabs.sendMessage(tabId, message, () => {
+      if (chrome.runtime.lastError) {
         if (logToConsole) {
+          console.log(chrome.runtime.lastError);
+          console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
+          console.log(`Tab ${tab.id}: ${tab.title}\n`);
+        }
+        reject();
+      }  
+      if (logToConsole) {
           console.log(`Successfully sent message to:\n`);
           console.log(`Tab ${tab.id}: ${tab.title}\n`);
         }
         resolve();
-      })
-      .catch(err => {
-        if (logToConsole) {
-          console.error(err);
-          console.log(
-            `Failed to send message ${JSON.stringify(message)} to:\n`
-          );
-          console.log(`Tab ${tab.id}: ${tab.title}\n`);
-        }
-        reject();
       });
   });
 }
