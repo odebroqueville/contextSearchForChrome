@@ -1183,7 +1183,7 @@ function verifyContentScriptIsInjectedInTabs(tabs, message){
     if (!tab.url.startsWith("http")) continue;
     sendMessageToTab(tab, message).then(null, () => {
       chrome.tabs.executeScript(
-        tab, {
+        tab.id, {
           file: "/scripts/selection.js"
       });
       arrayOfPromises.push(sendMessageToTab(tab, message));
