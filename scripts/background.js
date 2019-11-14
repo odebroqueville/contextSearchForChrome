@@ -1156,6 +1156,7 @@ function sendMessageToTabs(tabs, message) {
     let arrayOfPromises = [];
     if (logToConsole) {
       console.log(`Sending message to tabs..\n`);
+      console.log(tabs);
     }
     for (let tab of tabs) {
       arrayOfPromises.push(sendMessageToTab(tab, message));
