@@ -1167,17 +1167,17 @@ function sendMessageToTabs(tabs, message) {
     }
     Promise.all(arrayOfPromises)
       .then(() => {
+        if (chrome.runtime.lastError) {
+          if (logToConsole) {
+            console.error(chrome.runtime.lastError);
+            console.log("Failed to send message to ALL tabs.");
+          }
+          reject(chrome.runtime.lastError);
+        }
         if (logToConsole)
           console.log("Message has successfully been sent to ALL tabs.");
         resolve();
-      })
-      .catch(err => {
-        if (logToConsole) {
-          console.log(err);
-          console.log("Failed to send message to ALL tabs.");
-        }
-        reject();
-      });
+    });
   });
 }
 
