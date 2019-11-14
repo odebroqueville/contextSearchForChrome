@@ -62,7 +62,7 @@ const defaultOptions = {
     resetPreferences: contextsearch_resetPreferences,
     forceFaviconsReload: contextsearch_forceFaviconsReload
   }
-}
+};
 
 /// Handle Incoming Messages
 // Listen for messages from the content or options script
@@ -77,7 +77,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         processMultiTabSearch();
         break;
       }
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         if (chrome.runtime.lastError) {
           if (logToConsole) {
             console.log(chrome.runtime.lastError);
@@ -337,7 +337,7 @@ function getOptions() {
       }
       if (logToConsole) console.log(data);
       resolve(data);
-      });
+    });
   });
 }
 
@@ -514,13 +514,18 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
           if (chrome.runtime.lastError) {
             if (logToConsole) {
               console.log(chrome.runtime.lastError);
-              console.log("Failed to find any browser tabs to send the 'updateSearchEnginesList' message to.");
+              console.log(
+                "Failed to find any browser tabs to send the 'updateSearchEnginesList' message to."
+              );
             }
             reject();
           }
           if (tabs.length > 0) {
             if (logToConsole) console.log(tabs);
-            sendMessageToOptionsScript("updateSearchEnginesList", searchEnginesLocal);
+            sendMessageToOptionsScript(
+              "updateSearchEnginesList",
+              searchEnginesLocal
+            );
             updateSearchEnginesList(tabs);
           }
         });
@@ -530,31 +535,30 @@ function saveSearchEnginesToStorageSync(blnNotify, blnUpdateContentScripts) {
           "Search engines have been successfully saved to storage sync."
         );
       resolve();
-      })
+    });
   });
 }
 
 function updateSearchEnginesList(tabs) {
-  if (!isEmpty(tabs)) {
+  if (!isEmpty(tabs))
     sendMessageToTabs(tabs, {
       action: "updateSearchEnginesList",
       data: searchEngines
-    })
-      .then(() => {
-        if (logToConsole)
-          console.log(
-            "Message to update search engines has been sent to all tabs!\n"
-          );
-      })
-      .catch(err => {
-        if (logToConsole) {
-          console.log(err);
-          console.log(
-            "Failed to send the 'updateSearchEnginesList' message to the browser tabs."
-          );
-        }
-      });
-  }
+    });
+  // .then(() => {
+  //   if (logToConsole)
+  //     console.log(
+  //       "Message to update search engines has been sent to all tabs!\n"
+  //     );
+  // })
+  // .catch(err => {
+  //   if (logToConsole) {
+  //     console.log(err);
+  //     console.log(
+  //       "Failed to send the 'updateSearchEnginesList' message to the browser tabs."
+  //     );
+  //   }
+  // });
 }
 
 /// Get and store favicon urls and base64 images
@@ -808,12 +812,7 @@ function rebuildContextMenu() {
     let strTitle = searchEngines[id].name;
 
     searchEnginesArray.push(id);
-    buildContextMenuItem(
-      searchEngines[id],
-      strIndex,
-      strTitle,
-      base64String
-    );
+    buildContextMenuItem(searchEngines[id], strIndex, strTitle, base64String);
     index += 1;
   }
 
@@ -857,12 +856,7 @@ function rebuildContextOptionsMenu() {
 }
 
 /// Build a single context menu item
-function buildContextMenuItem(
-  searchEngine,
-  index,
-  title,
-  base64String
-) {
+function buildContextMenuItem(searchEngine, index, title, base64String) {
   const contexts = ["selection"];
   let faviconUrl = "data:image/png;base64," + base64String;
   if (!searchEngine.show) return;
@@ -934,11 +928,10 @@ function processMultiTabSearch() {
         return;
       }
       if (logToConsole) console.log(multiTabSearchEngineUrls);
-      chrome.windows
-        .create({
-          titlePreface: windowTitle + '"' + selection + '"',
-          url: multiTabSearchEngineUrls
-        });
+      chrome.windows.create({
+        titlePreface: windowTitle + '"' + selection + '"',
+        url: multiTabSearchEngineUrls
+      });
       resolve();
     });
   });
@@ -965,7 +958,7 @@ function searchUsing(id, tabIndex) {
 // Display the search results
 function displaySearchResults(targetUrl, tabPosition) {
   if (logToConsole) console.log("Tab position: " + tabPosition);
-  chrome.windows.getCurrent({ populate: false }, (windowInfo) => {
+  chrome.windows.getCurrent({ populate: false }, windowInfo => {
     if (chrome.runtime.lastError) {
       if (logToConsole) {
         console.log(chrome.runtime.lastError);
@@ -975,7 +968,7 @@ function displaySearchResults(targetUrl, tabPosition) {
     }
     let currentWindowID = windowInfo.id;
     if (contextsearch_openSearchResultsInNewWindow) {
-      chrome.windows.create({url: targetUrl}, () => {
+      chrome.windows.create({ url: targetUrl }, () => {
         if (chrome.runtime.lastError) {
           if (logToConsole) {
             console.log(chrome.runtime.lastError);
@@ -984,7 +977,7 @@ function displaySearchResults(targetUrl, tabPosition) {
           return;
         }
         if (!contextsearch_makeNewTabOrWindowActive) {
-          chrome.windows.update(currentWindowID, {focused: true});
+          chrome.windows.update(currentWindowID, { focused: true });
         }
       });
     } else if (contextsearch_openSearchResultsInNewTab) {
@@ -1023,10 +1016,12 @@ chrome.omnibox.onInputChanged.addListener((input, suggest) => {
 chrome.omnibox.onInputEntered.addListener(input => {
   if (logToConsole) console.log(input);
   let tabPosition = 0;
-  chrome.tabs.query({
+  chrome.tabs.query(
+    {
       currentWindow: true,
       active: true
-    }, (tabs) => {
+    },
+    tabs => {
       if (chrome.runtime.lastError) {
         if (logToConsole) {
           console.log(chrome.runtime.lastError);
@@ -1057,7 +1052,8 @@ chrome.omnibox.onInputEntered.addListener(input => {
           if (logToConsole) console.log("Failed to process " + input);
         }
       }
-    });
+    }
+  );
 });
 
 function buildSuggestion(text) {
@@ -1152,73 +1148,47 @@ function isEncoded(uri) {
 
 /// Send messages to content scripts (selection.js)
 function sendMessageToTabs(tabs, message) {
-  return new Promise((resolve, reject) => {
-    let arrayOfPromises = [];
-    if (logToConsole) {
-      console.log(`Sending message to tabs..\n`);
-      console.log(tabs);
-    }
-    arrayOfPromises = verifyContentScriptIsInjectedInTabs(tabs, message);
-    if (logToConsole) {
-      console.log(arrayOfPromises);
-    }
-    Promise.all(arrayOfPromises)
-      .then(() => {
-        if (chrome.runtime.lastError) {
-          if (logToConsole) {
-            console.error(chrome.runtime.lastError);
-            console.log("Failed to send message to ALL tabs.");
-          }
-          reject();
-        }
-        if (logToConsole)
-          console.log("Message has successfully been sent to ALL tabs.");
-        resolve();
-    });
-  });
-}
-
-function verifyContentScriptIsInjectedInTabs(tabs, message){
-  let arrayOfPromises = [];
+  if (logToConsole) {
+    console.log(`Sending message to tabs..\n`);
+    console.log(tabs);
+  }
   for (let tab of tabs) {
     if (!tab.url.startsWith("http")) continue;
     sendMessageToTab(tab, message).then(null, () => {
       chrome.tabs.executeScript(
-        tab.id, {
+        tab.id,
+        {
           file: "/scripts/selection.js"
-      });
-      arrayOfPromises.push(sendMessageToTab(tab, message));
+        },
+        sendMessageToTab(tab, message)
+      );
     });
   }
-  return arrayOfPromises;
 }
 
 function sendMessageToTab(tab, message) {
-  return new Promise((resolve, reject) => {
-    let tabId = tab.id;
-    chrome.tabs.sendMessage(tabId, message, () => {
-      if (chrome.runtime.lastError) {
-        if (logToConsole) {
-          console.log(chrome.runtime.lastError);
-          console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
-          console.log(`Tab ${tab.id}: ${tab.title}\n`);
-        }
-        reject();
-      }  
+  let tabId = tab.id;
+  chrome.tabs.sendMessage(tabId, message, () => {
+    if (chrome.runtime.lastError) {
       if (logToConsole) {
-          console.log(`Successfully sent message to:\n`);
-          console.log(`Tab ${tab.id}: ${tab.title}\n`);
-        }
-        resolve();
-      });
+        console.log(chrome.runtime.lastError);
+        console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
+        console.log(`Tab ${tabId}: ${tab.title}\n`);
+      }
+      return;
+    }
+    if (logToConsole) {
+      console.log(`Successfully sent message to:\n`);
+      console.log(`Tab ${tab.id}: ${tab.title}\n`);
+    }
   });
 }
 
-function sendMessageToOptionsScript(action, data){
+function sendMessageToOptionsScript(action, data) {
   let message = {
     action: action,
     data: data
-  }
+  };
   chrome.runtime.sendMessage(message);
 }
 
