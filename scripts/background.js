@@ -1158,10 +1158,7 @@ function sendMessageToTabs(tabs, message) {
       console.log(`Sending message to tabs..\n`);
       console.log(tabs);
     }
-    for (let tab of tabs) {
-      if (tab.url == "chrome://extensions/") continue;
-      arrayOfPromises.push(sendMessageToTab(tab, message));
-    }
+    verifyContentScriptIsInjectedInTabs(tabs, message);
     if (logToConsole) {
       console.log(arrayOfPromises);
     }
@@ -1181,6 +1178,19 @@ function sendMessageToTabs(tabs, message) {
   });
 }
 
+function verifyContentScriptIsInjectedInTabs(tabs, message){
+  for (let tab of tabs) {
+    if (!tab.url.startsWith("http")) continue;
+    sendMessageToTab(tab, message).then(null, () => {
+      chrome.tabs.executeScript(
+        tab, {
+          file: "/scripts/selection.js"
+      });
+      arrayOfPromises.push(sendMessageToTab(tab, message));
+    });
+  }
+}
+
 function sendMessageToTab(tab, message) {
   return new Promise((resolve, reject) => {
     let tabId = tab.id;
@@ -1191,7 +1201,7 @@ function sendMessageToTab(tab, message) {
           console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
           console.log(`Tab ${tab.id}: ${tab.title}\n`);
         }
-        reject();
+        reject(chrome.runtime.lastError);
       }  
       if (logToConsole) {
           console.log(`Successfully sent message to:\n`);
