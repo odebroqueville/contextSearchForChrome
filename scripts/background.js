@@ -1169,7 +1169,7 @@ function sendMessageToTabs(tabs, message) {
             console.error(chrome.runtime.lastError);
             console.log("Failed to send message to ALL tabs.");
           }
-          reject(chrome.runtime.lastError);
+          reject();
         }
         if (logToConsole)
           console.log("Message has successfully been sent to ALL tabs.");
@@ -1203,7 +1203,7 @@ function sendMessageToTab(tab, message) {
           console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
           console.log(`Tab ${tab.id}: ${tab.title}\n`);
         }
-        reject(chrome.runtime.lastError);
+        reject();
       }  
       if (logToConsole) {
           console.log(`Successfully sent message to:\n`);
