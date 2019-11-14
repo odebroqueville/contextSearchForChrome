@@ -1154,15 +1154,13 @@ function sendMessageToTabs(tabs, message) {
   }
   for (let tab of tabs) {
     if (!tab.url.startsWith("http")) continue;
-    sendMessageToTab(tab, message).then(null, () => {
-      chrome.tabs.executeScript(
-        tab.id,
-        {
-          file: "/scripts/selection.js"
-        },
-        sendMessageToTab(tab, message)
-      );
-    });
+    chrome.tabs.executeScript(
+      tab.id,
+      {
+        file: "/scripts/selection.js"
+      },
+      sendMessageToTab(tab, message)
+    );
   }
 }
 
