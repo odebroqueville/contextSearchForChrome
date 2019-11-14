@@ -1158,7 +1158,7 @@ function sendMessageToTabs(tabs, message) {
       console.log(`Sending message to tabs..\n`);
       console.log(tabs);
     }
-    verifyContentScriptIsInjectedInTabs(tabs, message);
+    arrayOfPromises = verifyContentScriptIsInjectedInTabs(tabs, message);
     if (logToConsole) {
       console.log(arrayOfPromises);
     }
@@ -1179,6 +1179,7 @@ function sendMessageToTabs(tabs, message) {
 }
 
 function verifyContentScriptIsInjectedInTabs(tabs, message){
+  let arrayOfPromises = [];
   for (let tab of tabs) {
     if (!tab.url.startsWith("http")) continue;
     sendMessageToTab(tab, message).then(null, () => {
@@ -1189,6 +1190,7 @@ function verifyContentScriptIsInjectedInTabs(tabs, message){
       arrayOfPromises.push(sendMessageToTab(tab, message));
     });
   }
+  return arrayOfPromises;
 }
 
 function sendMessageToTab(tab, message) {
