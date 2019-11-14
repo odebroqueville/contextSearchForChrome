@@ -1158,9 +1158,9 @@ function sendMessageToTabs(tabs, message) {
       tab.id,
       {
         file: "/scripts/selection.js"
-      },
-      sendMessageToTab(tab, message)
+      }
     );
+    sendMessageToTab(tab, message);
   }
 }
 
