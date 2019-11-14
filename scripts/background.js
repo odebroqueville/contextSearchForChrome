@@ -1159,6 +1159,7 @@ function sendMessageToTabs(tabs, message) {
       console.log(tabs);
     }
     for (let tab of tabs) {
+      if (tab.url == "chrome://extensions/") continue;
       arrayOfPromises.push(sendMessageToTab(tab, message));
     }
     Promise.all(arrayOfPromises)
