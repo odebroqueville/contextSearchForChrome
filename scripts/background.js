@@ -858,22 +858,22 @@ function rebuildContextOptionsMenu() {
 /// Build a single context menu item
 function buildContextMenuItem(searchEngine, index, title, base64String) {
   const contexts = ["selection"];
-  let faviconUrl = "data:image/png;base64," + base64String;
+  // let faviconUrl = "data:image/png;base64," + base64String;
   if (!searchEngine.show) return;
-  if (contextsearch_displayFavicons === true) {
-    chrome.contextMenus.create({
-      id: index,
-      title: title,
-      contexts: contexts,
-      icons: { "20": faviconUrl }
-    });
-  } else {
+  // if (contextsearch_displayFavicons === true) {
+  //   chrome.contextMenus.create({
+  //     id: index,
+  //     title: title,
+  //     contexts: contexts,
+  //     icons: { "20": faviconUrl }
+  //   });
+  // } else {
     chrome.contextMenus.create({
       id: index,
       title: title,
       contexts: contexts
     });
-  }
+  // }
 }
 
 // Perform search based on selected search engine, i.e. selected context menu item
@@ -1107,6 +1107,17 @@ function buildSuggestion(text) {
 
 /// Helper functions
 
+// Test if an object is empty
+function isEmpty(value) {
+  if (typeof value === "number") return false;
+  else if (typeof value === "string") return value.trim().length === 0;
+  else if (Array.isArray(value)) return value.length === 0;
+  else if (typeof value === "object")
+    return value == null || Object.keys(value).length === 0;
+  else if (typeof value === "boolean") return false;
+  else return !value;
+}
+
 // Test if a search engine performing a search for the keyword 'test' returns valid results
 function testSearchEngine(engineData) {
   if (engineData.url != "") {
@@ -1158,27 +1169,31 @@ function sendMessageToTabs(tabs, message) {
       tab.id,
       {
         file: "/scripts/selection.js"
-      }
-    );
-    sendMessageToTab(tab, message);
+      },
+      () => {
+        sendMessageToTab(tab, message);
+      });
   }
 }
 
 function sendMessageToTab(tab, message) {
-  let tabId = tab.id;
-  chrome.tabs.sendMessage(tabId, message, () => {
-    if (chrome.runtime.lastError) {
-      if (logToConsole) {
-        console.log(chrome.runtime.lastError);
-        console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
-        console.log(`Tab ${tabId}: ${tab.title}\n`);
+  return new Promise((resolve, reject) => {
+    let tabId = tab.id;
+    chrome.tabs.sendMessage(tabId, message, () => {
+      if (chrome.runtime.lastError) {
+        if (logToConsole) {
+          console.log(chrome.runtime.lastError);
+          console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
+          console.log(`Tab ${tabId}: ${tab.title}\n`);
+        }
+        reject();
       }
-      return;
-    }
-    if (logToConsole) {
-      console.log(`Successfully sent message to:\n`);
-      console.log(`Tab ${tab.id}: ${tab.title}\n`);
-    }
+      if (logToConsole) {
+        console.log(`Successfully sent message to:\n`);
+        console.log(`Tab ${tab.id}: ${tab.title}\n`);
+        resolve();
+      }
+    });
   });
 }
 

@@ -18,7 +18,7 @@ let sameTab = false;
 
 /// Generic Error Handler
 function onError(error) {
-  if (logToConsole) console.log(`${error}`);
+  if (logToConsole) console.log(error);
 }
 
 /// Debugging
