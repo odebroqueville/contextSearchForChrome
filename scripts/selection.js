@@ -40,9 +40,11 @@ chrome.storage.onChanged.addListener(handleStorageChange);
 
 /// Handle Incoming Messages
 // Listen for messages from the background script
-chrome.runtime.onMessage.addListener(function(message) {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	let action = message.action;
 	let data = message.data;
+	if (logToConsole) console.log(sender.tab ? 'from a content script:' + sender.tab.url : 'from the extension');
+	if (logToConsole) console.log(message);
 	switch (action) {
 		case 'updateSearchEnginesList':
 			updateSearchEnginesList(data);
@@ -56,6 +58,7 @@ chrome.runtime.onMessage.addListener(function(message) {
 					console.log(searchEngines[id]);
 				}
 			}
+			sendResponse({ received: true });
 			break;
 		default:
 			break;

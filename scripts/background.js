@@ -1102,7 +1102,8 @@ function sendMessageToTabs(tabs, message) {
 		chrome.tabs.executeScript(
 			tab.id,
 			{
-				file: '/scripts/selection.js'
+				file: '/scripts/selection.js',
+				runAt: 'document_start'
 			},
 			() => {
 				sendMessageToTab(tab, message);
@@ -1112,24 +1113,24 @@ function sendMessageToTabs(tabs, message) {
 }
 
 function sendMessageToTab(tab, message) {
-	return new Promise((resolve, reject) => {
-		let tabId = tab.id;
-		chrome.tabs.sendMessage(tabId, message, () => {
-			if (chrome.runtime.lastError) {
-				if (logToConsole) {
-					console.log(chrome.runtime.lastError);
-					console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
-					console.log(`Tab ${tabId}: ${tab.title}\n`);
-				}
-				reject();
-			}
+	// return new Promise((resolve, reject) => {
+	let tabId = tab.id;
+	chrome.tabs.sendMessage(tabId, message, (response) => {
+		if (response.received !== true) {
 			if (logToConsole) {
-				console.log(`Successfully sent message to:\n`);
-				console.log(`Tab ${tab.id}: ${tab.title}\n`);
-				resolve();
+				console.log(chrome.runtime.lastError);
+				console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
+				console.log(`Tab ${tabId}: ${tab.title}\n`);
 			}
-		});
+			return;
+		}
+		if (logToConsole) {
+			console.log(`Successfully sent message to:\n`);
+			console.log(`Tab ${tab.id}: ${tab.title}\n`);
+			// resolve();
+		}
 	});
+	// });
 }
 
 function sendMessageToOptionsScript(action, data) {
