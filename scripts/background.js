@@ -1093,44 +1093,43 @@ function isEncoded(uri) {
 
 /// Send messages to content scripts (selection.js)
 function sendMessageToTabs(tabs, message) {
+	let responseReceived = '';
 	if (logToConsole) {
-		console.log(`Sending message to tabs..\n`);
+		console.log(`Sending message:\n`);
+		console.log(message);
+		console.log(`to tabs..\n`);
 		console.log(tabs);
 	}
 	for (let tab of tabs) {
 		if (!tab.url.startsWith('http')) continue;
-		chrome.tabs.executeScript(
-			tab.id,
-			{
-				file: '/scripts/selection.js',
-				runAt: 'document_start'
-			},
-			() => {
-				sendMessageToTab(tab, message);
-			}
-		);
+		responseReceived = sendMessageToTab(tab, message);
+		if (responseReceived) {
+			if (logToConsole) console.log(`Successfully sent message to tab ${tab.id}: ${tab.title}`);
+		} else {
+			chrome.tabs.executeScript(
+				tab.id,
+				{
+					file: '/scripts/selection.js',
+					runAt: 'document_start'
+				},
+				() => {
+					responseReceived = sendMessageToTab(tab, message);
+					if (responseReceived) {
+						if (logToConsole) console.log(`Successfully sent message to tab ${tab.id}: ${tab.title}`);
+					} else {
+						if (logToConsole) console.log(`Failed to send message to tab ${tab.id}: ${tab.title}`);
+					}
+				}
+			);
+		}
 	}
 }
 
 function sendMessageToTab(tab, message) {
-	// return new Promise((resolve, reject) => {
-	let tabId = tab.id;
-	chrome.tabs.sendMessage(tabId, message, (response) => {
-		if (response.received !== true) {
-			if (logToConsole) {
-				console.log(chrome.runtime.lastError);
-				console.log(`Failed to send message ${JSON.stringify(message)} to:\n`);
-				console.log(`Tab ${tabId}: ${tab.title}\n`);
-			}
-			return;
-		}
-		if (logToConsole) {
-			console.log(`Successfully sent message to:\n`);
-			console.log(`Tab ${tab.id}: ${tab.title}\n`);
-			// resolve();
-		}
+	chrome.tabs.sendMessage(tab.id, message, (response) => {
+		if (response) return response.received || false;
 	});
-	// });
+	return false;
 }
 
 function sendMessageToOptionsScript(action, data) {
