@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 'use strict';
 
 /// Debug
@@ -669,7 +670,7 @@ function convertUrl2AbsUrl(href, domain) {
 	let urlParts = [];
 
 	// If the url is absolute, i.e. begins withh either'http' or 'https', there's nothing to do!
-	if (/^(https?\:\/\/)/.test(url)) return url;
+	if (/^(https?:\/\/)/.test(url)) return url;
 
 	if (url.includes('moz-extension://')) {
 		let i = url.lastIndexOf('moz-extension://') + 16;
@@ -689,10 +690,10 @@ function convertUrl2AbsUrl(href, domain) {
 
 	// If url is relative...
 	// If url begings with either './' or '/' (excluding './/' or '//')
-	if (/^([.]\/|\/)[^\/]/.test(url)) {
+	if (/^([.]\/|\/)[^/]/.test(url)) {
 		urlParts = url.split(/\//);
 		urlParts.shift();
-	} else if (/^[^\/]/.test(url)) {
+	} else if (/^[^/]/.test(url)) {
 		// url does not begin with '/'
 		urlParts = url.split(/\//);
 	}
@@ -755,12 +756,11 @@ function rebuildContextMenu() {
 	searchEnginesArray = [];
 	var index = 0;
 	for (let id in searchEngines) {
-		let base64String = searchEngines[id].base64;
 		let strIndex = 'cs-' + index.toString();
 		let strTitle = searchEngines[id].name;
 
 		searchEnginesArray.push(id);
-		buildContextMenuItem(searchEngines[id], strIndex, strTitle, base64String);
+		buildContextMenuItem(searchEngines[id], strIndex, strTitle);
 		index += 1;
 	}
 
@@ -804,24 +804,14 @@ function rebuildContextOptionsMenu() {
 }
 
 /// Build a single context menu item
-function buildContextMenuItem(searchEngine, index, title, base64String) {
+function buildContextMenuItem(searchEngine, index, title) {
 	const contexts = [ 'selection' ];
-	// let faviconUrl = "data:image/png;base64," + base64String;
 	if (!searchEngine.show) return;
-	// if (contextsearch_displayFavicons === true) {
-	//   chrome.contextMenus.create({
-	//     id: index,
-	//     title: title,
-	//     contexts: contexts,
-	//     icons: { "20": faviconUrl }
-	//   });
-	// } else {
 	chrome.contextMenus.create({
 		id: index,
 		title: title,
 		contexts: contexts
 	});
-	// }
 }
 
 // Perform search based on selected search engine, i.e. selected context menu item
