@@ -1,35 +1,25 @@
 {
-  "name": "contextSearch",
-  "title": "Context Search",
-  "version": "1.0.0",
-  "description": "Chrome extension to search selected text in a web page using your favorite search engines from a context menu.",
-  "devDependencies": {
-    "webextension-polyfill": "^0.5.0"
-  },
-  "scripts": {
-    "test": "eslint .",
-    "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/odebroqueville/contextSearchForChrome.git"
-  },
-  "keywords": [
-    "extension",
-    "plugin",
-    "context",
-    "context search",
-    "context menu",
-    "search",
-    "search engine"
-  ],
-  "author": "Olivier de Broqueville <olivier.debroqueville@gmail.com>",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/odebroqueville/contextSearchForChrome/issues"
-  },
-  "homepage": "https://github.com/odebroqueville/contextSearchForChrome#readme",
-  "dependencies": {
-    "sortablejs": "^1.10.1"
-  }
+	"name": "context-search",
+	"title": "Context Search",
+	"version": "1.0.0",
+	"description": "Chrome extension to search selected text in a web page using your favorite search engines from a context menu.",
+	"devDependencies": {},
+	"scripts": {
+		"test": "eslint .",
+		"lint": "eslint ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/odebroqueville/contextSearchForChrome.git"
+	},
+	"keywords": [ "extension", "plugin", "context", "context search", "context menu", "search", "search engine" ],
+	"author": "Olivier de Broqueville <olivier.debroqueville@gmail.com>",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/odebroqueville/contextSearchForChrome/issues"
+	},
+	"homepage": "https://github.com/odebroqueville/contextSearchForChrome#readme",
+	"dependencies": {
+		"sortablejs": "^1.10.1"
+	}
 }
