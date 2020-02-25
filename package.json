@@ -1,7 +1,7 @@
 {
 	"name": "context-search",
 	"title": "Context Search",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Chrome extension to search selected text in a web page using your favorite search engines from a context menu.",
 	"devDependencies": {},
 	"scripts": {
